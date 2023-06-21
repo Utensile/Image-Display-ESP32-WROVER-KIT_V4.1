@@ -77,7 +77,7 @@
 
         .upload-button {
             color: #FFFAA6;
-            background-color: #2A87AD; 
+            background-color:#128521;
             border: none;
             padding: 10px 20px;
             font-size: 25px;
@@ -87,7 +87,7 @@
         }
 
         .upload-button:hover {
-            background-color: #195066;
+            background-color: #083b0f;
         }
         .delete-button{
             color: #FFFAA6;
@@ -119,6 +119,21 @@
         .image{
             border: solid #6E6B39 0.5vh;
         }
+        .changeButton{
+            color: #FFFAA6;
+            background-color: #2A87AD; 
+            border: none;
+            padding: 10px 20px;
+            font-size: 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+
+        }
+        .changeButton:hover {
+            background-color: #195066;
+        }
     </style>
 </head>
 <body>
@@ -137,12 +152,15 @@
         <input type="file" id="file-upload">
         <label for="file-upload" class="upload-button">Upload Image</label>
         <a href="/D" class="delete-button" onclick="setImageToO()">Delete Image</a>
-        <br>
-        <a href = "/wifi" class="delete-button">Change Wifi</a>
+    </div>
+    <div>
+        <a href = "/wifi" class="changeButton">Change Wifi</a>
     </div>
    
 
     <script>
+
+        //Setting of keypressed button
         document.onkeydown = function(e) {
             switch (e.keyCode) {
                 case 37:
@@ -157,6 +175,9 @@
                     break;
             }
         };
+    
+
+        //Reset of the image once it has been cancelled
         function setImageToO(){
             var img = document.getElementById("img");
             img.src = "";
@@ -166,6 +187,7 @@
             }, 500);
         }
 
+        //Resizing and conversion of the input image
         function resizeImage(file, maxWidth, maxHeight, callback) {
             var image = new Image();
 
@@ -188,15 +210,19 @@
 
             image.src = URL.createObjectURL(file);
         }
-        var uploading = false;
-        window.onload = function() {
 
+        //Onload operations
+        window.onload = function() {
+            
+            //Timer to reload periodically the source of the image 
             setInterval(function(){
                 document.getElementById('img').src = "/image.jpg?"+new Date().getTime()    
             }, 500)
+
+
+            //Post request to server
             document.getElementById('file-upload').addEventListener('change', function(event) {
                 var file = event.target.files[0];
-                uploading = true;
                 resizeImage(file, 340, 240, function(resizedFile) {
                     var formData = new FormData();
                     formData.append('image', resizedFile);
